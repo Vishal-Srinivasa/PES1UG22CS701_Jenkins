@@ -1,33 +1,31 @@
-pipeline { 
-    agent any 
-    stages { 
-        stage('Clone repository') {
-            steps {
-                checkout([$class: 'GitSCM',
-                branches: [[name: '*/main']]
-                userRemoteConfigs: [[url: 'https://github.com/Vishal-Srinivasa/PES1UG22CS701_Jenkins.git']]])
-            }
-        }
-        stage('Build') { 
-            steps {
-                build 'PES1UG22CS701-1' 
-                sh 'g++ main.cpp -o output'
-            } 
-        } 
-        stage('Test') { 
-            steps { 
-                sh './output'
-            } 
-        } 
-        stage('Deploy') { 
-            steps { 
-                echo 'deploy' 
-            } 
-        } 
+pipeline {
+  agent any
+  
+  stages {
+    stage('Build'){
+      steps{
+        sh 'g++ -o PES1UG22CS707-1 main.cpp'
+        echo "Build Successful"
+      }
     }
-    post { 
-        failure { 
-            echo 'Pipeline failed' 
-        }
+    
+    stage('Test'){
+      steps{
+        sh './PES1UG22CS707-1'
+        echo "Test Successful"
+      }
     }
-} 
+    
+    stage('Deploy'){
+      steps{
+        echo "Deployment Successful"
+      }
+    }
+  }
+  
+  post{
+    failure{
+      echo "Pipeline Failed"
+    }
+  }
+}
